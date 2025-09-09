@@ -5,6 +5,7 @@ services:
     #entrypoint:  ['/bin/sh','-c', "while true; do sleep 1; done;"]
     volumes:
       - ./config/fluent-bit-custom.conf:/etc/fluent-bit/fluent-bit-custom.conf
+      - ./config/fluent-bit-parsers-custom.conf:/etc/fluent-bit/fluent-bit-parsers-custom.conf
     ports:
       - 8080:3000    
       - 5678:5678

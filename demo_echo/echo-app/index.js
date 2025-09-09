@@ -1,12 +1,16 @@
 
 const express = require('express');
 const { createLogger, transports, format } = require('winston');
+const ruid = require('express-ruid');
+
 const app = express();
+app.use(ruid({ setInContext: true }));
 
 const logger = createLogger({
+  defaultMeta: { app: 'gm2dev.demo.echo-app.express' },
   format: format.combine(
-    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-    format.json()    
+    format.timestamp(),
+    format.json()
   ),
   transports: [
     new transports.File({
@@ -20,17 +24,33 @@ const logger = createLogger({
 });
 app.use(express.json({ type: '*/*' }));
 
-app.get('/success', ({ params }, res) => {
-    logger.info("Request processed succesfully")
-    return res.status(200).send({
-        msg: "App Success"
-    });
+app.get('/success', (req, res) => {
+  logger.info("Request processed succesfully", { requestId: req.rid });
+  return res.status(200).send({
+    msg: "App Success",
+    requestId: req.rid
+
+  });
 });
 
-app.get('/fail', ({ params },res) => {
-    logger.error("Request failed")
+app.get('/fail', (req, res) => {
+  try {
+    a()
+  } catch (err) {
+    logger.error(err.message, { requestId: req.rid, stack: err.stack })
     return res.status(404).send({ error: 'App Error' });
+  }
 });
+
+const c = () => {
+  throw new Error("err");
+}
+const b = () => {
+  return c()
+}
+const a = () => {
+  return b()
+}
 
 
 module.exports = app
