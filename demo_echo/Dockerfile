@@ -13,5 +13,5 @@ RUN echo "@INCLUDE fluent-bit-parsers-custom.conf" >> /etc/fluent-bit/parsers.co
 
 COPY echo-app /app
 WORKDIR /app
-ENTRYPOINT  ["/bin/sh","-c", "nohup /opt/fluent-bit/bin/fluent-bit -d -c /etc/fluent-bit/fluent-bit.conf &  npm i && npm run start"]
+ENTRYPOINT  ["/bin/sh","-c", "npm i && npm run start | /opt/fluent-bit/bin/fluent-bit  -q -i stdin -c /etc/fluent-bit/fluent-bit.conf"]
 

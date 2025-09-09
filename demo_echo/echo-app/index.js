@@ -13,12 +13,12 @@ const logger = createLogger({
     format.json()
   ),
   transports: [
-    new transports.File({
-      filename: './logs.log',
-      json: true,
-      maxsize: 5242880,
-      maxFiles: 5,
-    }),
+    // new transports.File({
+    //   filename: './logs.log',
+    //   json: true,
+    //   maxsize: 5242880,
+    //   maxFiles: 5,
+    // }),    
     new transports.Console(),
   ]
 });
